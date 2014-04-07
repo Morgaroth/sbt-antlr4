@@ -2,11 +2,6 @@ sbtPlugin := true
 
 name := "sbt-antlr4"
 
-organization := "com.simplytyped"
+organization := "com.morgaroth"
 
-version := "0.7.1"
-
-publishTo := Some {
-  val target = if(version.value contains "SNAPSHOT") "snapshots" else "releases"
-  Resolver.file("simplytyped.com", new File("/Users/ihji/Works/simplytyped.github.io/repo",target))
-}
+version := "0.1.0"

@@ -7,9 +7,9 @@ This plugin provides an ability to run antlr4 when compiling in sbt 0.13.
 Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.sbt`
 file with the following contents:
 
-    resolvers += "simplytyped.com" at "http://simplytyped.com/repo/releases"
+    resolvers += "morggaroth-github" at "https://github.com/Morgaroth/sbt-antlr4/releases"
 
-    addSbtPlugin("com.simplytyped" % "sbt-antlr4" % "0.7.1")
+    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "0.1.0)
 
 And, add `antlr4Settings` to your `build.sbt` file.
 
@@ -23,9 +23,9 @@ And, add `antlr4Settings` to your `build.sbt` file.
 
 You can also adjust `-listener`, `-no-listener`, `-visitor`, `-no-visitor` options:
 
-    antlr4GenListener in Antlr4 := true // default: true
+    antlr4GenListener in Antlr4 := false // default: false
 
-    antlr4GenVisitor in Antlr4 := false // default: false
+    antlr4GenVisitor in Antlr4 := true // default: true
  
 ## License
 

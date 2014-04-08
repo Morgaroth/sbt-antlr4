@@ -4,12 +4,11 @@ This plugin provides an ability to run antlr4 when compiling in sbt 0.13.
 
 ## How to use
 
-Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.sbt`
-file with the following contents:
+Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.sbt` file with the following contents:
 
-    resolvers += "morggaroth-github" at "https://github.com/Morgaroth/sbt-antlr4/releases"
+    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
-    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "0.1.0)
+    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "0.1.1)
 
 And, add `antlr4Settings` to your `build.sbt` file.
 
@@ -19,13 +18,18 @@ And, add `antlr4Settings` to your `build.sbt` file.
 
 `-package` option can be given by the following setting:
 
-    antlr4PackageName in Antlr4 := Some("com.simplytyped")
+    antlr4PackageName in Antlr4 := Some("com.morgaroth")
 
 You can also adjust `-listener`, `-no-listener`, `-visitor`, `-no-visitor` options:
 
     antlr4GenListener in Antlr4 := false // default: false
 
     antlr4GenVisitor in Antlr4 := true // default: true
+    
+And set output directory for generated java classes (eg parser):
+
+    javaSource in Antlr4 := new File("/path/to/your/project/src/main/java/")
+
  
 ## License
 

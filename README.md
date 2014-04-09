@@ -6,9 +6,9 @@ This plugin provides an ability to run antlr4 when compiling in sbt 0.13.
 
 Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.sbt` file with the following contents:
 
-    resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+    resolvers += "Sonatype OSS" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
-    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "0.1.1)
+    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "0.1.1")
 
 And, add `antlr4Settings` to your `build.sbt` file.
 

@@ -8,18 +8,11 @@ sbtPlugin := true
 
 name := "sbt-antlr4"
 
-organization := "com.morgaroth"
+organization := "pl.morgaroth"
 
-version := "0.1.2"
+version := "1.3"
 
 publishMavenStyle := true
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { _ => false }
-
-
-
 
 pomExtra := <url>https://github.com/Morgaroth/sbt-antlr4</url>
   <licenses>

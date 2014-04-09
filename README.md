@@ -8,7 +8,7 @@ Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.s
 
     resolvers += "Sonatype OSS" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
-    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "0.1.1")
+    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "1.3")
 
 And, add `antlr4Settings` to your `build.sbt` file.
 
@@ -16,9 +16,10 @@ And, add `antlr4Settings` to your `build.sbt` file.
 
 ## Settings
 
-`-package` option can be given by the following setting:
+`-package`
+ if You want to set package of generated classes, it can be given by the following setting:
 
-    antlr4PackageName in Antlr4 := Some("com.morgaroth")
+    antlr4PackageName in Antlr4 := Some("com.morgaroth") //default default, no package
 
 You can also adjust `-listener`, `-no-listener`, `-visitor`, `-no-visitor` options:
 
@@ -28,7 +29,7 @@ You can also adjust `-listener`, `-no-listener`, `-visitor`, `-no-visitor` optio
     
 And set output directory for generated java classes (eg parser):
 
-    javaSource in Antlr4 := new File("/path/to/your/project/src/main/java/")
+    javaSource in Antlr4 := new File("/path/to/your/project/src/main/java/") // default /your/project/path/gen/
 
  
 ## License

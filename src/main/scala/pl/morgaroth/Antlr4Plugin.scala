@@ -1,8 +1,12 @@
-package com.simplytyped
+package pl.morgaroth
 
 import sbt._
-import Keys._
+import sbt.Keys._
+import sbt.Task
 
+/**
+ * Created by mateusz on 10.04.14.
+ */
 object Antlr4Plugin extends Plugin {
   val Antlr4 = config("antlr4")
 
@@ -11,13 +15,14 @@ object Antlr4Plugin extends Plugin {
   val antlr4PackageName = SettingKey[Option[String]]("antlr4-package-name")
   val antlr4GenListener = SettingKey[Boolean]("antlr4-gen-listener")
   val antlr4GenVisitor = SettingKey[Boolean]("antlr4-gen-visitor")
+  val antlr4OutputDir = SettingKey[File]("antlr4-output")
 
   def antlr4GeneratorTask : Def.Initialize[Task[Seq[File]]] = Def.task {
     val cachedCompile = FileFunction.cached(streams.value.cacheDirectory / "antlr4", FilesInfo.lastModified, FilesInfo.exists) {
       in : Set[File] =>
         runAntlr(
           srcFiles = in,
-          targetBaseDir = (javaSource in Antlr4).value,
+          targetBaseDir = (antlr4OutputDir in Antlr4).value,
           classpath = (managedClasspath in Compile).value.files,
           log = streams.value.log,
           packageName = (antlr4PackageName in Antlr4).value,
@@ -50,16 +55,16 @@ object Antlr4Plugin extends Plugin {
 
   val antlr4Settings = inConfig(Antlr4)(Seq(
     sourceDirectory <<= (sourceDirectory in Compile) {_ / "antlr4"},
-    javaSource <<= sourceManaged in Compile,
+    antlr4OutputDir <<= sourceManaged in Compile,
     antlr4Generate <<= antlr4GeneratorTask,
     antlr4Dependency := "org.antlr" % "antlr4" % "4.2.1",
     antlr4PackageName := None,
     antlr4GenListener := false,
     antlr4GenVisitor := true
   )) ++ Seq(
-    managedSourceDirectories in Compile <+= (javaSource in Antlr4),
+    managedSourceDirectories in Compile <+= (antlr4OutputDir in Antlr4),
     sourceGenerators in Compile <+= (antlr4Generate in Antlr4),
-    cleanFiles <+= (javaSource in Antlr4),
+    cleanFiles <+= (antlr4OutputDir in Antlr4),
     libraryDependencies <+= (antlr4Dependency in Antlr4)
   )
 }

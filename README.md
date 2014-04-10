@@ -4,32 +4,41 @@ This plugin provides an ability to run antlr4 when compiling in sbt 0.13.
 
 ## How to use
 
-Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.sbt` file with the following contents:
+#### Put your .g4 files in `src/main/antlr4` directory and make `project/sbt-antlr4.sbt` file with the following contents:
 
     resolvers += "Sonatype OSS" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 
-    addSbtPlugin("com.morgaroth" % "sbt-antlr4" % "1.3")
+    addSbtPlugin("pl.morgaroth" % "sbt-antlr4" % "1.4")
 
-And, add `antlr4Settings` to your `build.sbt` file.
+#### And, add `antlr4Settings` to your `build.sbt` file.
 
     antlr4Settings
 
 ## Settings
 
-`-package`
- if You want to set package of generated classes, it can be given by the following setting:
+#### if You want to set package of generated classes, it can be given by the following setting:
 
     antlr4PackageName in Antlr4 := Some("com.morgaroth") //default default, no package
 
-You can also adjust `-listener`, `-no-listener`, `-visitor`, `-no-visitor` options:
+#### You can also adjust `-listener`, `-no-listener`, `-visitor`, `-no-visitor` options:
 
     antlr4GenListener in Antlr4 := false // default: false
 
     antlr4GenVisitor in Antlr4 := true // default: true
     
-And set output directory for generated java classes (eg parser):
+#### And set output directory for generated java classes (eg parser):
 
-    javaSource in Antlr4 := new File("/path/to/your/project/src/main/java/") // default /your/project/path/gen/
+
+    default directory: /yourprojectpath/target/resolution-cache/scala_{ver}/src_managed/main
+
+
+    antlr4OutputDir in Antlr4 := new File("/yourprojectpath/where/You/want/")
+
+eg:
+
+    antlr4OutputDir in Antlr4 := (javaSource in Compile).value //if You want put it to /yourprojectpath/src/main/java
+
+
 
  
 ## License

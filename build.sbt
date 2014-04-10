@@ -10,7 +10,7 @@ name := "sbt-antlr4"
 
 organization := "pl.morgaroth"
 
-version := "1.3"
+version := "1.4"
 
 publishMavenStyle := true
 

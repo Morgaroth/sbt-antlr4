@@ -4,9 +4,6 @@ import sbt._
 import sbt.Keys._
 import sbt.Task
 
-/**
- * Created by mateusz on 10.04.14.
- */
 object Antlr4Plugin extends Plugin {
   val Antlr4 = config("antlr4")
 
@@ -17,9 +14,9 @@ object Antlr4Plugin extends Plugin {
   val antlr4GenVisitor = SettingKey[Boolean]("antlr4-gen-visitor")
   val antlr4OutputDir = SettingKey[File]("antlr4-output")
 
-  def antlr4GeneratorTask : Def.Initialize[Task[Seq[File]]] = Def.task {
+  def antlr4GeneratorTask: Def.Initialize[Task[Seq[File]]] = Def.task {
     val cachedCompile = FileFunction.cached(streams.value.cacheDirectory / "antlr4", FilesInfo.lastModified, FilesInfo.exists) {
-      in : Set[File] =>
+      in: Set[File] =>
         runAntlr(
           srcFiles = in,
           targetBaseDir = (antlr4OutputDir in Antlr4).value,
@@ -33,31 +30,46 @@ object Antlr4Plugin extends Plugin {
     cachedCompile(((sourceDirectory in Antlr4).value ** "*.g4").get.toSet).toSeq
   }
 
+  def printAndReturn(string: String) = {
+    println(string)
+    string
+  }
+
   def runAntlr(
-      srcFiles: Set[File],
-      targetBaseDir: File,
-      classpath: Seq[File],
-      log: Logger,
-      packageName: Option[String],
-      listenerOpt: Boolean,
-      visitorOpt: Boolean) = {
-    val targetDir = packageName.map{_.split('.').foldLeft(targetBaseDir){_/_}}.getOrElse(targetBaseDir)
+                srcFiles: Set[File],
+                targetBaseDir: File,
+                classpath: Seq[File],
+                log: Logger,
+                packageName: Option[String],
+                listenerOpt: Boolean,
+                visitorOpt: Boolean) = {
+    val targetDir = packageName.map {
+      _.split('.').foldLeft(targetBaseDir) {
+        _ / _
+      }
+    }.getOrElse(targetBaseDir)
     val baseArgs = Seq("-cp", Path.makeString(classpath), "org.antlr.v4.Tool", "-o", targetDir.toString)
-    val packageArgs = packageName.toSeq.flatMap{p => Seq("-package",p)}
-    val listenerArgs = if(listenerOpt) Seq("-listener") else Seq("-no-listener")
-    val visitorArgs = if(visitorOpt) Seq("-visitor") else Seq("-no-visitor")
-    val sourceArgs = srcFiles.map{_.toString}
+    val packageArgs = packageName.toSeq.flatMap {
+      p => Seq("-package", p)
+    }
+    val listenerArgs = if (listenerOpt) Seq("-listener") else Seq("-no-listener")
+    val visitorArgs = if (visitorOpt) Seq("-visitor") else Seq("-no-visitor")
+    val sourceArgs = srcFiles.map {
+      _.toString
+    }
     val args = baseArgs ++ packageArgs ++ listenerArgs ++ visitorArgs ++ sourceArgs
     val exitCode = Process("java", args) ! log
-    if(exitCode != 0) sys.error(s"Antlr4 failed with exit code $exitCode")
+    if (exitCode != 0) sys.error(s"Antlr4 failed with exit code $exitCode")
     (targetDir ** "*.java").get.toSet
   }
 
   val antlr4Settings = inConfig(Antlr4)(Seq(
-    sourceDirectory <<= (sourceDirectory in Compile) {_ / "antlr4"},
+    sourceDirectory <<= (sourceDirectory in Compile) {
+      _ / "antlr4"
+    },
     antlr4OutputDir <<= sourceManaged in Compile,
     antlr4Generate <<= antlr4GeneratorTask,
-    antlr4Dependency := "org.antlr" % "antlr4" % "4.2.1",
+    antlr4Dependency := "org.antlr" % "antlr4" % "4.2.2",
     antlr4PackageName := None,
     antlr4GenListener := false,
     antlr4GenVisitor := true
